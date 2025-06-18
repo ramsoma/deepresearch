@@ -1,6 +1,6 @@
 # Deep Research Agent
 
-An intelligent research assistant that generates comprehensive research reports with proper citations and references using advanced AI models.
+An intelligent research assistant that generates comprehensive research reports with proper citations and references using advanced AI models.Follows the Anthropic implementation ( https://www.anthropic.com/engineering/built-multi-agent-research-system).
 
 ## Features
 
