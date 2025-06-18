@@ -1,0 +1,161 @@
+# Deep Research Agent
+
+An intelligent research assistant that generates comprehensive research reports with proper citations and references using advanced AI models.
+
+## Features
+
+- **Intelligent Research Planning**: Automatically generates research plans based on queries
+- **Multi-Source Analysis**: Analyzes content from multiple sources and extracts key insights
+- **Automatic Citation Generation**: Generates properly formatted citations and references
+- **Modular Architecture**: Built with DSPy framework for extensible AI agents
+- **Multiple Citation Styles**: Supports APA and Chicago citation styles
+- **Comprehensive Reports**: Generates structured research reports with multiple sections
+
+## Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/ramsoma/deepresearch.git
+cd deepresearch
+```
+
+2. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+3. Set up environment variables:
+```bash
+export GOOGLE_API_KEY="your-google-api-key"
+export LLM_MODEL="gemini-pro"
+```
+
+## Usage
+
+### Command Line Interface
+
+Generate a research report:
+```bash
+python -m deep_research_agent.cli "What are the latest developments in quantum computing?"
+```
+
+With custom options:
+```bash
+python -m deep_research_agent.cli "Your research query" \
+    --mode full \
+    --sections "Introduction" "Findings" "Conclusions" "References" \
+    --depth 3 \
+    --results 10 \
+    --citation-style apa
+```
+
+### Programmatic Usage
+
+```python
+from deep_research_agent.agents.lead_researcher import LeadResearcher
+
+# Initialize the researcher
+researcher = LeadResearcher(config={
+    "citation_style": "chicago",
+    "citation_threshold": 0.6
+})
+
+# Define research strategy
+strategy = {
+    "mode": "full",
+    "sections": ["Introduction", "Findings", "Conclusions", "References"],
+    "max_depth": 3,
+    "max_results": 5,
+    "citation_style": "chicago"
+}
+
+# Generate report
+report = researcher.forward("Your research query", strategy)
+
+# Save to markdown
+with open("report.md", "w") as f:
+    f.write(report.to_markdown())
+```
+
+## Project Structure
+
+```
+deep_research_agent/
+├── agents/                 # AI agents
+│   ├── base_agent.py      # Base agent class
+│   ├── lead_researcher.py # Main research coordinator
+│   └── subagents/         # Specialized agents
+│       ├── citation_agent.py
+│       ├── llm_citation_agent.py
+│       ├── reviewer_agent.py
+│       └── web_searcher.py
+├── core/                  # Core functionality
+│   ├── config.py         # Configuration management
+│   ├── memory.py         # Research memory
+│   └── template_manager.py
+├── evaluations/          # Evaluation and metrics
+│   └── evaluators/
+├── prompts/              # Prompt templates
+├── templates/            # Jinja2 templates
+├── utils/                # Utility functions
+└── cli.py               # Command line interface
+```
+
+## Configuration
+
+### Environment Variables
+
+- `GOOGLE_API_KEY`: Your Google API key for Gemini Pro
+- `LLM_MODEL`: LLM model to use (default: "gemini-pro")
+
+### Strategy Options
+
+- `mode`: "full" or "partial" research mode
+- `sections`: List of sections to include in the report
+- `max_depth`: Maximum search depth (default: 3)
+- `max_results`: Maximum results per search (default: 5)
+- `citation_style`: "apa" or "chicago" (default: "chicago")
+- `citation_threshold`: Similarity threshold for citations (default: 0.6)
+
+## Citation Features
+
+- **Automatic Citation Detection**: Identifies claims that need citations
+- **Multiple Citation Styles**: Supports APA and Chicago formats
+- **Consistent Numbering**: Maintains consistent citation numbers across sections
+- **Reference Generation**: Automatically generates numbered reference lists
+- **Citation Validation**: Ensures all citations have corresponding references
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature-name`
+3. Make your changes and add tests
+4. Commit your changes: `git commit -am 'Add feature'`
+5. Push to the branch: `git push origin feature-name`
+6. Submit a pull request
+
+## Testing
+
+Run the test suite:
+```bash
+python -m pytest tests/
+```
+
+Run specific tests:
+```bash
+python -m pytest tests/test_lead_researcher.py
+```
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
+
+- Built with [DSPy](https://github.com/stanfordnlp/dspy) framework
+- Powered by Google's Gemini Pro model
+- Uses Jinja2 for template management
+
+## Support
+
+For issues and questions, please open an issue on GitHub or contact the maintainers. 

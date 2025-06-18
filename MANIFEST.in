@@ -1,0 +1,19 @@
+include README.md
+include LICENSE
+include requirements.txt
+include CONTRIBUTING.md
+include setup.py
+
+recursive-include deep_research_agent/templates *.jinja2
+recursive-include deep_research_agent/prompts *.py
+recursive-include deep_research_agent/configs *.json
+
+global-exclude *.pyc
+global-exclude *.pyo
+global-exclude __pycache__
+global-exclude .DS_Store
+global-exclude .git*
+global-exclude *.log
+global-exclude artifacts/
+global-exclude reports/
+global-exclude batch_output_*/ 

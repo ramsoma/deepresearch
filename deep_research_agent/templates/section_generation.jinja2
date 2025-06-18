@@ -1,0 +1,134 @@
+{% if section_type == "Executive Summary" %}
+Generate an executive summary for a research report about: {{ topic }}
+
+The executive summary should:
+1. Provide a concise overview of the entire report
+2. Highlight the most important findings and conclusions
+3. Include key recommendations
+4. Be clear and accessible to non-technical readers
+5. Use citations from the content analysis to support key claims
+
+Using the following analysis:
+{{ analysis | tojson(indent=2) }}
+
+{% elif section_type == "Introduction" %}
+Generate an introduction section for a research report about: {{ topic }}
+
+The introduction should:
+1. Provide background context and motivation
+2. Clearly state the research objectives
+3. Outline the scope and methodology
+4. Preview the main findings
+5. Use citations from the content analysis to support key claims
+
+Using the following analysis:
+{{ analysis | tojson(indent=2) }}
+
+{% elif section_type == "Main Findings" %}
+Generate the main findings section for a research report about: {{ topic }}
+
+The main findings should:
+1. Present key discoveries and results
+2. Organize findings by topic/subtopic
+3. Include relevant data and evidence
+4. Highlight significant patterns or trends
+5. Use citations from the content analysis to support key claims
+
+Using the following analysis:
+{{ analysis | tojson(indent=2) }}
+
+{% elif section_type == "Analysis and Discussion" %}
+Generate the analysis and discussion section for a research report about: {{ topic }}
+
+The analysis should:
+1. Interpret the findings in detail
+2. Compare with existing research
+3. Discuss implications and significance
+4. Address limitations and potential biases
+5. Use citations from the content analysis to support key claims
+
+Using the following analysis:
+{{ analysis | tojson(indent=2) }}
+
+{% elif section_type == "Conclusions" %}
+Generate the conclusions section for a research report about: {{ topic }}
+
+The conclusions should:
+1. Summarize key findings
+2. Draw final insights
+3. Address research objectives
+4. Highlight broader implications
+5. Use citations from the content analysis to support key claims
+
+Using the following analysis:
+{{ analysis | tojson(indent=2) }}
+
+{% elif section_type == "Recommendations" %}
+Generate the recommendations section for a research report about: {{ topic }}
+
+The recommendations should:
+1. Provide actionable suggestions
+2. Prioritize recommendations
+3. Include implementation considerations
+4. Address potential challenges
+5. Use citations from the content analysis to support key claims
+
+Using the following analysis:
+{{ analysis | tojson(indent=2) }}
+
+{% elif section_type == "References" %}
+Generate the references section for a research report about: {{ topic }}
+
+The references should:
+1. List all cited sources from the content analysis
+2. Use consistent citation format with numbers: [1] Author, A. (Year). Title
+3. Include complete publication details
+4. Be ordered by citation number
+5. Only include references that were actually cited in the text
+
+Using the following analysis:
+{{ analysis | tojson(indent=2) }}
+
+{% else %}
+Generate a section for a research report about: {{ topic }}
+
+The section should:
+1. Have a clear and descriptive title
+2. Present relevant content
+3. Include key points
+4. Use citations from the content analysis to support key claims
+
+Using the following analysis:
+{{ analysis | tojson(indent=2) }}
+{% endif %}
+
+IMPORTANT: You must respond with ONLY a valid JSON object. Do not include any other text or explanation.
+The response must be a single JSON object with the following structure:
+{
+    "title": "Section Title",
+    "content": "Section content with numeric citations like [1], [2,3]...",
+    "key_points": ["Key point 1", "Key point 2", ...],
+    "citations": [
+        {
+            "id": "1",
+            "text": "[1] Author, A. (Year). Title. URL",
+            "url": "https://example.com/paper1"
+        }
+    ]
+}
+
+Remember:
+1. Use double quotes for all strings
+2. Use square brackets for arrays
+3. Use curly braces for objects
+4. Include a comma between array elements
+5. Do not include any trailing commas
+6. Do not include any markdown formatting
+7. Do not include any explanatory text outside the JSON
+8. Use ONLY citations from the content analysis
+9. Only include citations that are actually used in the text
+10. Use numeric citations in the format [1], [2,3], etc.
+11. Ensure citation numbers match the order in the citations array
+12. Format references with numbers: [1] Author, A. (Year). Title
+
+Respond with ONLY the JSON object. 
