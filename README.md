@@ -152,6 +152,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Acknowledgments
 
+- Anthropic for inspiration and description - https://www.anthropic.com/engineering/built-multi-agent-research-system
 - Built with [DSPy](https://github.com/stanfordnlp/dspy) framework
 - Powered by Google's Gemini Pro model
 - Uses Jinja2 for template management
