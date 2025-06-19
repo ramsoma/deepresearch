@@ -2,13 +2,14 @@ import argparse
 import logging
 from .agents.lead_researcher import LeadResearcher
 from .evaluations.evaluators.artifact_evaluator import ArtifactEvaluator
+from .core.logging_config import setup_logging, get_logger
 import json
 from datetime import datetime
 import os
 
-# Configure logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+# Set up logging before importing other modules
+setup_logging(log_level="INFO", log_dir="logs")
+logger = get_logger(__name__)
 
 def parse_args():
     """Parse command line arguments."""

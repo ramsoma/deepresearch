@@ -4,9 +4,10 @@ import logging
 import re
 import os
 import google.generativeai as genai
+from ...core.logging_config import get_logger
 
-# Configure logging
-logger = logging.getLogger(__name__)
+# Get logger
+logger = get_logger(__name__)
 
 class LLMCitationAgent:
     """
@@ -102,21 +103,8 @@ Remember:
             cited_text = cited_text.split("## References")[0].strip()
             logger.info("Successfully extracted References section")
         else:
-            logger.warning("No References section found in Gemini Pro response, generating one from sources")
-            # Generate references section from sources if LLM didn't provide one
-            references_section = "## References\n\n"
-            for i, s in enumerate(sources):
-                authors = ', '.join(s.get('authors', ['Unknown Author']))
-                year = s.get('year', 'n.d.')
-                title = s.get('title', 'Untitled')
-                url = s.get('url', '')
-                
-                if citation_style == "apa":
-                    reference = f"[{i+1}] {authors}. ({year}). {title}. {url if url else '[No URL available]'}"
-                else:  # chicago
-                    reference = f"[{i+1}] {authors}. {year}. \"{title}.\" {url if url else '[No URL available]'}"
-                
-                references_section += f"{reference}\n\n"
+            logger.warning("No References section found in Gemini Pro response")
+            references_section = ""
         
         # Format citations with both text and reference fields
         citations = []
@@ -150,7 +138,7 @@ Remember:
             logger.debug(f"Formatted citation: {text} -> {reference}")
         
         # Validate that all citations in the text have corresponding references
-        citation_pattern = r'\[(\d+(?:,\d+)*)\]'
+        citation_pattern = r'\[(\d+(?:\s*,\s*\d+)*)\]'
         found_citations = []
         for match in re.finditer(citation_pattern, cited_text):
             citation_text = match.group(0)
@@ -161,8 +149,8 @@ Remember:
         # Filter citations to only include those that are actually used in the text
         used_citations = [c for c in citations if int(c["id"]) in found_citations]
         
+        formatted_references = ""
         # Format references section with only used citations
-        formatted_references = "## References\n\n"
         # Sort used citations by their numeric ID
         used_citations.sort(key=lambda x: int(x["id"]))
         for citation in used_citations:

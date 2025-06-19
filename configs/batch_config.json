@@ -5,6 +5,7 @@
             "mode": "full",
             "depth": 3,
             "results": 5,
+            "sections": ["Executive Summary", "Introduction", "Main Findings", "Analysis and Discussion", "Conclusions", "Recommendations", "References"], 
             "citation_style": "chicago",
             "citation_threshold": 0.6,
             "ground_truth": "Quantum computing has seen significant advances in error correction and qubit stability. Major companies like IBM and Google have achieved quantum supremacy and are working on scaling up their systems. Recent developments include improved coherence times and the development of new quantum algorithms."
@@ -12,7 +13,7 @@
         {
             "query": "How has artificial intelligence impacted healthcare in the last 5 years?",
             "mode": "full",
-            "sections": ["Introduction", "Current Applications", "Future Outlook"],
+            "sections": ["Introduction", "Current Applications", "Future Outlook", "References"],
             "depth": 2,
             "results": 5,
             "citation_style": "apa",
@@ -22,29 +23,32 @@
         {
             "query": "What are the environmental impacts of electric vehicles?",
             "mode": "partial",
-            "sections": ["Manufacturing Impact", "Battery Lifecycle", "Carbon Footprint"],
+            "sections": ["Manufacturing Impact", "Battery Lifecycle", "Carbon Footprint", "References"],
             "depth": 2,
             "results": 4,
             "citation_style": "chicago",
+            "ground_truth": "Electric vehicles (EVs) reduce air pollution and greenhouse gas emissions, especially when powered by clean electricity, and are more energy-efficient than traditional gasoline cars. However, environmental concerns remain around battery production, including resource extraction and energy use, as well as end-of-life battery recycling. The overall impact depends heavily on the electricity mix and responsible battery lifecycle management.",
             "citation_threshold": 0.65
         },
         {
             "query": "Is there a business opportunity for small Language models that can run on edge devices. What are the key use cases, challenges and opportunities?",
             "mode": "partial",
-            "sections": ["Introduction", "Key Use Cases", "Challenges", "Opportunities"],
-            "depth": 2,
-            "results": 4,
+            "sections": ["Introduction", "Key Use Cases", "Challenges", "Opportunities", "References"],
+            "depth": 3,
+            "results": 5,
             "citation_style": "chicago",
+            "ground_truth": "Yes, there's a strong business opportunity for small language models on edge devices, offering low-latency, privacy-preserving AI without cloud dependency. Key use cases include smart assistants, industrial automation, offline customer support, and real-time language translation. Challenges include model compression, limited compute resources, and updates, but opportunities lie in customization, data sovereignty, and markets with poor connectivity.",
             "citation_threshold": 0.65
         },
         {
             "query": "Analyze the depiction of dragons in Tui T Sutherland's books. What are the key themes, symbolism, and cultural significance of dragons in his work?",
             "mode": "partial",
-            "sections": ["introduction", "key themes", "symbolism", "cultural significance"],
-            "depth": 2,
-            "results": 4,
+            "sections": ["introduction", "key themes", "symbolism", "cultural significance", "References"],
+            "depth": 3,
+            "results": 5,
             "citation_style": "chicago",
-            "citation_threshold": 0.65
+            "citation_threshold": 0.65,
+            "ground_truth": "In Tui T. Sutherland’s Wings of Fire series, dragons are portrayed as intelligent, emotionally complex beings, reflecting themes of identity, destiny, and the struggle between war and peace. Each dragon tribe embodies distinct cultures and values, symbolizing diversity and the challenges of coexistence. This reimagining gives dragons cultural depth and moral complexity, making them central to the series’ exploration of leadership, choice, and empathy."
         }
     ]
 } 

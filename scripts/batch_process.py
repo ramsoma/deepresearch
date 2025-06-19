@@ -8,10 +8,11 @@ import pandas as pd
 from deep_research_agent.cli import generate_report
 from deep_research_agent.evaluations.evaluators.research_evaluator import ResearchEvaluator
 from deep_research_agent.evaluations.evaluators.artifact_evaluator import ArtifactEvaluator
+from deep_research_agent.core.logging_config import setup_logging, get_logger
 
-# Configure logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+# Set up logging
+setup_logging(log_level="INFO", log_dir="logs")
+logger = get_logger(__name__)
 
 class BatchProcessor:
     def __init__(self, config_path: str):
@@ -64,8 +65,7 @@ class BatchProcessor:
             
             # Evaluate if ground truth provided
             evaluation = None
-            if ground_truth:
-                evaluation = self._evaluate_report(report_path, artifacts_path, ground_truth)
+            evaluation = self._evaluate_report(report_path, artifacts_path, ground_truth)
             
             results.append({
                 "query": query,

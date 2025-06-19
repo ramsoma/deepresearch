@@ -13,11 +13,11 @@ from ..core.template_manager import TemplateManager
 from evaluations.evaluators.artifact_evaluator import ArtifactEvaluator
 from datetime import datetime
 from deep_research_agent.agents.subagents.llm_citation_agent import LLMCitationAgent
+from ..core.logging_config import get_logger
 import json
 
-# Configure logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+# Get logger
+logger = get_logger(__name__)
 
 class ResearchStrategy(dspy.Signature):
     """Structure for research strategy."""
