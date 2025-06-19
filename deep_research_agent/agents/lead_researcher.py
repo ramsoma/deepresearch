@@ -6,13 +6,13 @@ from typing import Any, Dict, List, Optional
 
 import dspy
 import google.generativeai as genai
-from evaluations.evaluators.artifact_evaluator import ArtifactEvaluator
 
 from deep_research_agent.agents.subagents.llm_citation_agent import LLMCitationAgent
 
 from ..core.logging_config import get_logger
 from ..core.memory import ResearchMemory
 from ..core.template_manager import TemplateManager
+from ..evaluations.evaluators.artifact_evaluator import ArtifactEvaluator
 from .subagents.reviewer_agent import ReviewerAgent, ReviewFeedback
 from .subagents.web_searcher import WebSearcher
 
@@ -672,6 +672,19 @@ The content should be detailed and informative, suitable for a research report."
                 f"""Added References section with
                         {len(citation_result['citations'])} citations"""
             )
+
+        # Always add References section if requested, even if no citations/sources
+        if "References" in sections_list and not any(
+            s.title == "References" for s in sections
+        ):
+            references_section = ReportSection(
+                title="References",
+                content="No references available.",
+                key_points=[],
+                citations=[],
+            )
+            sections.append(references_section)
+            logger.info("Added empty References section (no citations/sources found)")
 
         # Create the report
         report = ResearchReport(

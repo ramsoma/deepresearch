@@ -1,5 +1,6 @@
 import json
 import unittest
+from contextlib import ExitStack
 from unittest.mock import MagicMock, patch
 
 from deep_research_agent.agents.lead_researcher import LeadResearcher, ReportSection
@@ -114,7 +115,29 @@ class TestPipeline(unittest.TestCase):
             if "research plan" in prompt.lower():
                 response.text = json.dumps(self.mock_responses["plan"])
             elif "content analysis" in prompt.lower():
-                response.text = json.dumps(self.mock_responses["analysis"])
+                response.text = json.dumps(
+                    {
+                        "main_points": [
+                            "Quantum computing uses qubits",
+                            "Recent breakthroughs in error correction",
+                        ],
+                        "key_insights": [
+                            "Quantum supremacy achieved",
+                            "Practical applications emerging",
+                        ],
+                        "technical_details": [
+                            "Qubit coherence times improving",
+                            "Error correction codes advancing",
+                        ],
+                        "applications": ["Cryptography", "Drug discovery"],
+                        "future_directions": [
+                            "Fault-tolerant quantum computers",
+                            "Quantum internet",
+                        ],
+                        "confidence_score": 0.9,
+                        "citations": [],
+                    }
+                )
             elif "review" in prompt.lower():
                 response.text = json.dumps(self.mock_responses["review"])
             elif "references" in prompt.lower():
@@ -161,14 +184,15 @@ class TestPipeline(unittest.TestCase):
                 "deep_research_agent.agents.lead_researcher.SectionGenerator"
             ),
             "citation_agent": patch(
-                "deep_research_agent.agents.lead_researcher.CitationAgent"
+                "deep_research_agent.agents.subagents.citation_agent.CitationAgent"
             ),
         }
 
-        # Start all patches
+        # Use ExitStack to manage all patches as a context manager
+        self.exit_stack = ExitStack()
         self.mocks = {}
         for name, patcher in self.patches.items():
-            self.mocks[name] = patcher.start()
+            self.mocks[name] = self.exit_stack.enter_context(patcher)
 
         # Configure the mocks
         self.mocks["llm"].return_value = self.mock_model
@@ -180,7 +204,12 @@ class TestPipeline(unittest.TestCase):
         def mock_section_generator(topic, analysis, section_type=None):
             if section_type == "References":
                 return ReportSection(**self.mock_responses["references"])
-            return ReportSection(**self.mock_responses["section"])
+            return ReportSection(
+                title=section_type or "Introduction",
+                content=f"Content for {section_type or 'Introduction'} [Doe, 2023]",
+                key_points=[f"Key point for {section_type or 'Introduction'}"],
+                citations=[{"text": "[Doe, 2023]"}],
+            )
 
         self.mocks[
             "section_generator"
@@ -197,13 +226,12 @@ class TestPipeline(unittest.TestCase):
             "citation_agent"
         ].return_value.forward.side_effect = mock_citation_agent
 
-        # Initialize the lead researcher
+        # Initialize the lead researcher inside the patch context
         self.lead_researcher = LeadResearcher()
 
     def tearDown(self):
         """Clean up after the test."""
-        for patcher in self.patches.values():
-            patcher.stop()
+        self.exit_stack.close()
 
     def test_full_pipeline(self):
         """Test the full research pipeline with a real-world query."""
@@ -215,10 +243,22 @@ class TestPipeline(unittest.TestCase):
             "max_results": 3,
             "focus_areas": ["basics", "applications"],
             "test_mode": True,
+            "sections": [
+                "Introduction",
+                "Main Findings",
+                "Analysis and Discussion",
+                "Conclusions",
+                "Recommendations",
+                "References",
+            ],
         }
 
         # Run the pipeline
         report = self.lead_researcher.forward(query, strategy)
+
+        # Diagnostic prints
+        print("Report sections:", [section.title for section in report.sections])
+        print("Report object:", report)
 
         # Basic structure checks
         self.assertIsNotNone(report)

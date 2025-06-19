@@ -5,8 +5,6 @@ from typing import Any, Dict, List
 import dspy
 import google.generativeai as genai
 
-from ..lead_researcher import ResearchReport
-
 logger = logging.getLogger(__name__)
 
 
@@ -36,7 +34,7 @@ class ReviewerAgent(dspy.Module):
         self.model = genai.GenerativeModel(os.getenv("LLM_MODEL", "gemini-pro"))
 
     def forward(
-        self, report: ResearchReport, query: str, strategy: Dict[str, Any]
+        self, report: Any, query: str, strategy: Dict[str, Any]
     ) -> ReviewFeedback:
         """Review a research report and provide feedback."""
         logger.info("Starting report review")
