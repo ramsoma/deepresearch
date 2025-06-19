@@ -61,12 +61,12 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install flake8 black isort mypy
+        pip install flake8 black==23.3.0 isort mypy
 
     - name: Run linters
       run: |
         flake8 --max-line-length=88 --extend-ignore=E203,W503 deep_research_agent/ tests/
-        black --check deep_research_agent/ tests/
+        black --line-length 88 --check deep_research_agent/ tests/
         isort --check-only deep_research_agent/ tests/
         mypy deep_research_agent/
 
