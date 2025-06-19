@@ -8,10 +8,10 @@ I used Cursor, heavily leveraging the code gen capabilities for this work. Overa
 ---
 
 ## ✅ What Went Well
-- **Framework Code Generation**  
+- **Framework Code Generation**
   Core structure and boilerplate were generated quickly and accurately. A lot of the code worked fine out of the box.
 
-- **Supporting Code**  
+- **Supporting Code**
   Generated high-quality auxiliary code with minimal manual work:
   - ✅ Unit and integration **tests**
   - ✅ Developer **scripts**
@@ -22,14 +22,14 @@ I used Cursor, heavily leveraging the code gen capabilities for this work. Overa
 ---
 
 ## ⚠️ What Could Have Gone Better
-- **Slower Code Acceptance**  
+- **Slower Code Acceptance**
   - Delays in reviewing and accepting generated code introduced bottlenecks.
 
 - **Regressions**
   - I ran into a lot of problems with **citation generation**:
     - The initial implementation was a rule based approach had a lot flaws. Eventually I switched to a LLM based approach for generating / inserting citations (duh!).
     - Multiple fixes via *cursor* were attempted but ineffective. Code generation made highly localized changes addressing the problem. Many of these lead to regressions and often did not fix the issue.
-    - Ultimately had to change the approach to citation handling quite drastically (rule -> llm, section wise processing -> citations generation AFTER text generation). 
+    - Ultimately had to change the approach to citation handling quite drastically (rule -> llm, section wise processing -> citations generation AFTER text generation).
   - Writing tests earlier could have caught regressions sooner.
 
 ---
@@ -53,4 +53,3 @@ I used Cursor, heavily leveraging the code gen capabilities for this work. Overa
    - Improve iteratively with testing and feedback.
 
 ---
-

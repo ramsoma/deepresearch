@@ -2,11 +2,11 @@
     "queries": [
         {
         "query": "What are the latest developments in quantum computing?",
-        "mode": "full", 
-        "sections": ["Executive Summary", "Introduction", "Main Findings", "Analysis and Discussion", "Conclusions", "Recommendations", "References"], 
-        "max_depth": 3, 
-        "max_results": 10, 
-        "citation_style": "chicago", 
+        "mode": "full",
+        "sections": ["Executive Summary", "Introduction", "Main Findings", "Analysis and Discussion", "Conclusions", "Recommendations", "References"],
+        "max_depth": 3,
+        "max_results": 10,
+        "citation_style": "chicago",
         "citation_threshold": 0.6}
     ]
-} 
+}

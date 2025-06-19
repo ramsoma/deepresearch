@@ -5,7 +5,7 @@
             "mode": "full",
             "depth": 3,
             "results": 5,
-            "sections": ["Executive Summary", "Introduction", "Main Findings", "Analysis and Discussion", "Conclusions", "Recommendations", "References"], 
+            "sections": ["Executive Summary", "Introduction", "Main Findings", "Analysis and Discussion", "Conclusions", "Recommendations", "References"],
             "citation_style": "chicago",
             "citation_threshold": 0.6,
             "ground_truth": "Quantum computing has seen significant advances in error correction and qubit stability. Major companies like IBM and Google have achieved quantum supremacy and are working on scaling up their systems. Recent developments include improved coherence times and the development of new quantum algorithms."
@@ -51,4 +51,4 @@
             "ground_truth": "In Tui T. Sutherland’s Wings of Fire series, dragons are portrayed as intelligent, emotionally complex beings, reflecting themes of identity, destiny, and the struggle between war and peace. Each dragon tribe embodies distinct cultures and values, symbolizing diversity and the challenges of coexistence. This reimagining gives dragons cultural depth and moral complexity, making them central to the series’ exploration of leadership, choice, and empathy."
         }
     ]
-} 
+}

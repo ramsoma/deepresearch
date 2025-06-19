@@ -41,4 +41,4 @@ uv pip install -r requirements.txt
 
 echo -e "${GREEN}Setup complete! Virtual environment is ready to use.${NC}"
 echo -e "${YELLOW}To activate the virtual environment, run:${NC}"
-echo -e "source venv/bin/activate" 
+echo -e "source venv/bin/activate"

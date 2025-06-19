@@ -1,34 +1,37 @@
 import unittest
-from unittest.mock import Mock, patch
+from unittest.mock import Mock
+
 import google.generativeai as genai
+
 from deep_research_agent.agents.subagents.llm_citation_agent import LLMCitationAgent
+
 
 class TestLLMCitationAgent(unittest.TestCase):
     def setUp(self):
         # Mock the LLM
         self.mock_llm = Mock(spec=genai.GenerativeModel)
         self.agent = LLMCitationAgent(self.mock_llm, citation_style="chicago")
-        
+
         # Sample test data
         self.test_text = """
         Quantum computing has made significant progress in recent years.
         Researchers have achieved breakthroughs in qubit stability and error correction.
         New algorithms are being developed for practical applications.
         """
-        
+
         self.test_sources = [
             {
                 "authors": ["Smith", "Jones"],
                 "year": 2023,
                 "title": "Advances in Quantum Computing",
-                "url": "https://example.com/quantum"
+                "url": "https://example.com/quantum",
             },
             {
                 "authors": ["Brown"],
                 "year": 2024,
                 "title": "Quantum Error Correction",
-                "url": "https://example.com/error"
-            }
+                "url": "https://example.com/error",
+            },
         ]
 
     def test_initialization(self):
@@ -41,12 +44,15 @@ class TestLLMCitationAgent(unittest.TestCase):
         # Mock LLM response
         mock_response = Mock()
         mock_response.text = """
-        Quantum computing has made significant progress in recent years [Smith, Jones, 2023].
-        Researchers have achieved breakthroughs in qubit stability and error correction [Brown, 2024].
+        Quantum computing has made significant progress in recent years
+        [Smith, Jones, 2023].
+        Researchers have achieved breakthroughs in qubit stability and error correction
+        [Brown, 2024].
         New algorithms are being developed for practical applications.
 
         ## References
-        Smith, Jones. 2023. "Advances in Quantum Computing." https://example.com/quantum
+        Smith, Jones. 2023. "Advances in Quantum Computing."
+        https://example.com/quantum
         Brown. 2024. "Quantum Error Correction." https://example.com/error
         """
         self.mock_llm.generate_content.return_value = mock_response
@@ -66,8 +72,10 @@ class TestLLMCitationAgent(unittest.TestCase):
         # Mock LLM response without References section
         mock_response = Mock()
         mock_response.text = """
-        Quantum computing has made significant progress in recent years [Smith, Jones, 2023].
-        Researchers have achieved breakthroughs in qubit stability and error correction [Brown, 2024].
+        Quantum computing has made significant progress in recent years
+        [Smith, Jones, 2023].
+        Researchers have achieved breakthroughs in qubit stability and error correction
+        [Brown, 2024].
         New algorithms are being developed for practical applications.
         """
         self.mock_llm.generate_content.return_value = mock_response
@@ -95,7 +103,7 @@ class TestLLMCitationAgent(unittest.TestCase):
         Quantum computing has made significant progress [Smith, Jones, 2023].
         New developments in error correction [Brown, 2024].
         """
-        
+
         # Mock LLM response
         mock_response = Mock()
         mock_response.text = text_with_citations
@@ -109,5 +117,6 @@ class TestLLMCitationAgent(unittest.TestCase):
         self.assertIn("Smith, Jones", result["references"])
         self.assertIn("Brown", result["references"])
 
-if __name__ == '__main__':
-    unittest.main() 
+
+if __name__ == "__main__":
+    unittest.main()

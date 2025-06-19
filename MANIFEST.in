@@ -16,4 +16,4 @@ global-exclude .git*
 global-exclude *.log
 global-exclude artifacts/
 global-exclude reports/
-global-exclude batch_output_*/ 
+global-exclude batch_output_*/

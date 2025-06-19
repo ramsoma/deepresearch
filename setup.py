@@ -1,17 +1,19 @@
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
 
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 with open("requirements.txt", "r", encoding="utf-8") as fh:
-    requirements = [line.strip() for line in fh if line.strip() and not line.startswith("#")]
+    requirements = [
+        line.strip() for line in fh if line.strip() and not line.startswith("#")
+    ]
 
 setup(
     name="deep-research-agent",
     version="0.1.0",
     author="Deep Research Agent Team",
     author_email="your-email@example.com",
-    description="An intelligent research assistant that generates comprehensive research reports with proper citations",
+    description="An intelligent research assistant that generates comprehensive research reports with proper citations",  # noqa: E501
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/ramsoma/deepresearch",
@@ -46,4 +48,4 @@ setup(
         "Source": "https://github.com/ramsoma/deepresearch",
         "Documentation": "https://github.com/ramsoma/deepresearch#readme",
     },
-) 
+)

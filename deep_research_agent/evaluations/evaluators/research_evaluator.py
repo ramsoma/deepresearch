@@ -1,49 +1,64 @@
-from typing import Any, Dict, Optional, List
+import logging
+import os
+from typing import Any, Dict, List, Optional
+
 import dspy
 import google.generativeai as genai
-import os
-import logging
+
 from ..base_evaluator import BaseEvaluator, EvaluationMetrics
 from ..metrics import ResearchMetrics
 
 logger = logging.getLogger(__name__)
 
+
 class ResearchEvaluation(dspy.Signature):
     """Structure for research evaluation results."""
-    factual_accuracy: float = dspy.OutputField(desc="Score for factual accuracy (0.0-1.0)")
-    citation_accuracy: float = dspy.OutputField(desc="Score for citation accuracy (0.0-1.0)")
+
+    factual_accuracy: float = dspy.OutputField(
+        desc="Score for factual accuracy (0.0-1.0)"
+    )
+    citation_accuracy: float = dspy.OutputField(
+        desc="Score for citation accuracy (0.0-1.0)"
+    )
     completeness: float = dspy.OutputField(desc="Score for completeness (0.0-1.0)")
     source_quality: float = dspy.OutputField(desc="Score for source quality (0.0-1.0)")
-    tool_efficiency: float = dspy.OutputField(desc="Score for tool efficiency (0.0-1.0)")
+    tool_efficiency: float = dspy.OutputField(
+        desc="Score for tool efficiency (0.0-1.0)"
+    )
     overall_score: float = dspy.OutputField(desc="Overall evaluation score (0.0-1.0)")
-    passed: bool = dspy.OutputField(desc="Whether the research output passes quality threshold")
+    passed: bool = dspy.OutputField(
+        desc="Whether the research output passes quality threshold"
+    )
     feedback: List[str] = dspy.OutputField(desc="Specific feedback points")
     confidence: float = dspy.OutputField(desc="Confidence in the evaluation (0.0-1.0)")
 
+
 class ResearchEvaluator(BaseEvaluator):
     """Evaluator for research outputs using LLM-as-judge approach."""
-    
+
     def __init__(self, config: Optional[Dict[str, Any]] = None):
         super().__init__(config)
         self.model = genai.GenerativeModel(os.getenv("LLM_MODEL", "gemini-pro"))
         self.metrics = ResearchMetrics()
         self.quality_threshold = config.get("quality_threshold", 0.7) if config else 0.7
-    
-    def evaluate(self,
-                research_output: Any,
-                ground_truth: Optional[Any] = None,
-                context: Optional[Dict[str, Any]] = None) -> EvaluationMetrics:
+
+    def evaluate(
+        self,
+        research_output: Any,
+        ground_truth: Optional[Any] = None,
+        context: Optional[Dict[str, Any]] = None,
+    ) -> EvaluationMetrics:
         """Evaluate research output quality using LLM-as-judge."""
         logger.info("Starting LLM-as-judge evaluation")
-        
+
         # Prepare evaluation prompt
         prompt = self._create_evaluation_prompt(research_output, ground_truth, context)
-        
+
         # Get LLM evaluation
         try:
             response = self.model.generate_content(prompt)
             evaluation = self._parse_evaluation_response(response.text)
-            
+
             # Convert to EvaluationMetrics
             metrics = EvaluationMetrics(
                 accuracy=evaluation.factual_accuracy,
@@ -55,29 +70,30 @@ class ResearchEvaluator(BaseEvaluator):
                     "tool_efficiency": evaluation.tool_efficiency,
                     "passed": evaluation.passed,
                     "confidence": evaluation.confidence,
-                    "feedback": evaluation.feedback
-                }
+                    "feedback": evaluation.feedback,
+                },
             )
-            
+
             return metrics
-            
+
         except Exception as e:
             logger.error(f"Error in LLM evaluation: {str(e)}")
             return EvaluationMetrics(
                 accuracy=0.0,
                 relevance=0.0,
                 coherence=0.0,
-                additional_metrics={
-                    "error": str(e)
-                }
+                additional_metrics={"error": str(e)},
             )
-    
-    def _create_evaluation_prompt(self,
-                                research_output: Any,
-                                ground_truth: Optional[Any],
-                                context: Optional[Dict[str, Any]]) -> str:
+
+    def _create_evaluation_prompt(
+        self,
+        research_output: Any,
+        ground_truth: Optional[Any],
+        context: Optional[Dict[str, Any]],
+    ) -> str:
         """Create the evaluation prompt for the LLM judge."""
-        prompt = f"""You are an expert research evaluator. Your task is to evaluate the following research output and provide detailed scores and feedback.
+        prompt = f"""You are an expert research evaluator. Your task is to evaluate the
+        following research output and provide detailed scores and feedback.
 
 Research Output to Evaluate:
 {research_output}
@@ -124,7 +140,8 @@ Evaluate the research output based on the following criteria:
    - Was the number of tool calls reasonable?
    - Were tools used effectively?
 
-IMPORTANT: You must respond with ONLY a valid JSON object. Do not include any other text or explanation.
+IMPORTANT: You must respond with ONLY a valid JSON object.
+Do not include any other text or explanation.
 
 Provide your evaluation in the following structure:
 {
@@ -152,29 +169,38 @@ Remember:
 Respond with ONLY the JSON object, no other text."""
 
         return prompt
-    
+
     def _parse_evaluation_response(self, response_text: str) -> ResearchEvaluation:
         """Parse the LLM's evaluation response."""
         try:
             import json
+
             # Clean the response text
             response_text = response_text.strip()
-            response_text = response_text.replace("```json", "").replace("```", "").strip()
-            
+            response_text = (
+                response_text.replace("```json", "").replace("```", "").strip()
+            )
+
             # Parse JSON
             result = json.loads(response_text)
-            
+
             # Validate required fields
             required_fields = [
-                "factual_accuracy", "citation_accuracy", "completeness",
-                "source_quality", "tool_efficiency", "overall_score",
-                "passed", "feedback", "confidence"
+                "factual_accuracy",
+                "citation_accuracy",
+                "completeness",
+                "source_quality",
+                "tool_efficiency",
+                "overall_score",
+                "passed",
+                "feedback",
+                "confidence",
             ]
-            
+
             for field in required_fields:
                 if field not in result:
                     raise ValueError(f"Missing required field: {field}")
-            
+
             # Create ResearchEvaluation object
             return ResearchEvaluation(
                 factual_accuracy=float(result["factual_accuracy"]),
@@ -185,9 +211,9 @@ Respond with ONLY the JSON object, no other text."""
                 overall_score=float(result["overall_score"]),
                 passed=bool(result["passed"]),
                 feedback=list(result["feedback"]),
-                confidence=float(result["confidence"])
+                confidence=float(result["confidence"]),
             )
-            
+
         except Exception as e:
             logger.error(f"Error parsing evaluation response: {str(e)}")
-            raise ValueError(f"Failed to parse evaluation response: {str(e)}") 
+            raise ValueError(f"Failed to parse evaluation response: {str(e)}")
